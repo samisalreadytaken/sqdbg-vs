@@ -1,0 +1,72 @@
+{
+	"name": "sqdbg-vs",
+	"displayName": "Squirrel Debug Extension",
+	"version": "0.1.0",
+	"publisher": "samisalreadytaken",
+	"description": "",
+	"author": { "name": "samisalreadytaken" },
+	"engines": { "vscode": "^1.74.0" },
+	"categories": ["Debuggers"],
+	"repository": { "type": "git", "url": "https://github.com/samisalreadytaken/sqdbg-vs" },
+	"activationEvents": ["onDebug", "onDebugResolve:squirrel", "onDebugDynamicConfigurations:squirrel"],
+	"main": "extension.js",
+	"browser": "extension.js",
+	"contributes":
+	{
+		"breakpoints": [{ "language": "squirrel" }],
+		"debuggers": [
+			{
+				"type": "squirrel",
+				"label": "Squirrel Debugger",
+				"languages": ["squirrel"],
+				"configurationAttributes": {
+					"attach": {
+						"required": ["port"],
+						"properties": {
+							"port": {
+								"type": "integer",
+								"description": "Remote debug target port to connect to"
+							},
+							"address": {
+								"type": "string",
+								"description": "Remote debug target address to connect to (default: localhost)",
+								"default": "127.0.0.1"
+							}
+						}
+					}
+				},
+				"initialConfigurations": [
+					{
+						"type": "squirrel",
+						"request": "attach",
+						"name": "Server",
+						"port": 0
+					},
+					{
+						"type": "squirrel",
+						"request": "attach",
+						"name": "Client",
+						"port": 0
+					}
+				],
+				"compounds": [
+					{
+						"name": "Server & Client",
+						"configurations": ["Server", "Client"]
+					}
+				],
+				"variables": {
+					"GetPort": "extension.sqdbg-vs.GetPort",
+					"GetAddress": "extension.sqdbg-vs.GetAddress"
+				}
+			}
+		],
+		"languages": [
+			{
+				"id": "squirrel",
+				"extensions": [".nut"],
+				"aliases": ["squirrel", "sq"]
+			}
+		]
+	}
+}
